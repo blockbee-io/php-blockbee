@@ -1,0 +1,32 @@
+{
+  "name": "blockbee/php-blockbee",
+  "type": "library",
+  "description": "BlockBee's PHP library",
+  "keywords": ["crypto", "bitcoin", "litecoin", "ethereum", "bitcoin cash", "monero", "iota", "payments", "cryptocurrencies", "polygon", "tron", "binance smart chain", "erc20", "bep20"],
+  "homepage": "https://github.com/cryptapi/php-cryptapi",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "BlockBee",
+      "email": "info@blockbee.io",
+      "homepage": "https://blockbee.io",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "info@blockbee.io",
+    "chat": "https://blockbee.io",
+    "docs": "https://docs.blockbee.io/"
+  },
+  "require": {
+    "php": ">=5.6.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "BlockBee\\": "BlockBee/"
+    }
+  },
+  "version": "1.0.0"
+}
