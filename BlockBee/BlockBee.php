@@ -16,13 +16,17 @@ class BlockBee
     private $parameters      = [];
     private $api_key         = null;
 
-    public function __construct($coin, $own_address, $callback_url, $parameters = [], $bb_params = [], $api_key)
+    public function __construct($coin, $own_address, $callback_url, $parameters = [], $bb_params = [], $api_key = '')
     {
         $this->valid_coins = BlockBee::get_supported_coins($api_key);
 
         if (!in_array($coin, $this->valid_coins)) {
             $vc = print_r($this->valid_coins, true);
             throw new Exception("Unsupported Coin: {$coin}, Valid options are: {$vc}");
+        }
+
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
         }
 
         $this->own_address  = $own_address;
@@ -143,9 +147,14 @@ class BlockBee
         return null;
     }
 
-    public static function get_info($coin = null, $assoc = false, $api_key)
+    public static function get_info($coin = null, $assoc = false, $api_key = '')
     {
         $params = [];
+
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
+        }
+
         $params['apikey'] = $api_key;
 
         if (empty($coin)) {
@@ -161,8 +170,12 @@ class BlockBee
         return null;
     }
 
-    public static function get_estimate($coin, $addresses = 1, $priority = 'default', $api_key)
+    public static function get_estimate($coin, $addresses = 1, $priority = 'default', $api_key = '')
     {
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
+        }
+
         $response = BlockBee::_request($coin, 'estimate', [
             'addresses' => $addresses,
             'priority'  => $priority,
