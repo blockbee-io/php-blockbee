@@ -10,10 +10,7 @@ PHP >= 5.6
 ext-curl
 ```
 
-
-
 ## Install
-
 
 ```
 composer require blockbee/php-blockbee
@@ -182,8 +179,39 @@ $coins = BlockBee\BlockBee::get_supported_coins($api_key);
 
 Response is an array with all support coins.
 
+### Request Payout
+
+```php
+<?php
+require 'vendor/autoload.php'; // Where your vendor directory is
+
+$create_payout = BlockBee\BlockBee::create_payout($coin, $address, $value, $api_key);
+```
+
+This function can be used by you to request payouts (withdrawals in your platform).
+
+Where:
+* ``$coin`` The cryptocurrency you want to request the Payout in (e.g `btc`, `eth`, `erc20_usdt`, ...).
+
+* ``$address`` Address where the Payout must be sent to.
+
+* ``$value`` Amount to send to the ``address``.
+
+The response will be only a ``success`` to confirm the Payout Request was successfully created. To fulfill it you will need to go to BlockBee Dashboard.
 
 ## Help
 
 Need help?  
 Contact us @ https://blockbee.io/contacts/
+
+### Changelog
+
+#### 1.0.0
+* Initial release.
+
+#### 1.0.1
+* Minor bugfixes.
+
+#### 1.1.0
+* Added Payouts
+* Minor bugfixes

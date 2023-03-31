@@ -19,7 +19,7 @@
     "docs": "https://docs.blockbee.io/"
   },
   "require": {
-    "php": ">=5.6.0",
+    "php": ">=7.2.0",
     "ext-curl": "*",
     "ext-json": "*"
   },
@@ -28,5 +28,5 @@
       "BlockBee\\": "BlockBee/"
     }
   },
-  "version": "1.0.1"
+  "version": "1.1.0"
 }

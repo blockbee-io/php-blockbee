@@ -191,9 +191,31 @@ class BlockBee
 
     public static function get_convert($coin, $value, $from, $api_key)
     {
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
+        }
+
         $response = BlockBee::_request($coin, 'convert', [
             'value' => $value,
             'from'  => $from,
+            'apikey' => $api_key
+        ]);
+
+        if ($response->status == 'success') {
+            return $response;
+        }
+
+        return null;
+    }
+
+    public static function create_payout ($coin, $address, $value, $api_key) {
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
+        }
+
+        $response = BlockBee::_request($coin, 'payout', [
+            'address' => $address,
+            'value'  => $value,
             'apikey' => $api_key
         ]);
 
