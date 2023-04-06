@@ -67,7 +67,7 @@ class BlockBee
 
     public function get_address()
     {
-        if (empty($this->own_address) || empty($this->coin) || empty($this->callback_url)) {
+        if (empty($this->coin) || empty($this->callback_url)) {
             return null;
         }
 
@@ -83,10 +83,13 @@ class BlockBee
             'apikey' => $this->api_key
         ], $this->bb_params);
 
+        if (empty($this->own_address)) {
+            unset($bb_params['address']);
+        }
+
         $response = BlockBee::_request($this->coin, 'create', $bb_params);
 
         if ($response->status == 'success') {
-            // assert($response->address_out == $this->own_address, 'Output address mismatch');
             $this->payment_address = $response->address_in;
             return $response->address_in;
         }
