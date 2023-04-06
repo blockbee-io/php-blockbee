@@ -35,7 +35,7 @@ Where:
 
 ``$coin`` is the coin you wish to use, from BlockBee's supported currencies (e.g `'btc', 'eth', 'erc20_usdt', ...`)
 
-``$my_address`` is your own crypto address, where your funds will be sent to  
+``$my_address`` is your own crypto address, where your funds will be sent to. If you already set your address in our [Dashboard](https://dash.blockbee.io/) you can leave this empty.  
 
 ``$callback_url`` is the URL that will be called upon payment
 
