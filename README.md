@@ -218,3 +218,6 @@ Contact us @ https://blockbee.io/contacts/
 
 #### 1.1.1
 * Minor bugfixes
+
+#### 1.1.2
+* Minor bugfixes

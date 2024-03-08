@@ -216,7 +216,7 @@ class BlockBee
             throw new Exception('API Key is Empty');
         }
 
-        $response = BlockBee::_request($coin, 'payout', [
+        $response = BlockBee::_request($coin, 'payout/request/create', [
             'address' => $address,
             'value'  => $value,
             'apikey' => $api_key
