@@ -25,10 +25,6 @@ class BlockBee
             throw new Exception("Unsupported Coin: {$coin}, Valid options are: {$vc}");
         }
 
-        if (empty($api_key)) {
-            throw new Exception('API Key is Empty');
-        }
-
         $this->own_address  = $own_address;
         $this->callback_url = $callback_url;
         $this->coin         = $coin;
@@ -39,6 +35,10 @@ class BlockBee
 
     public static function get_supported_coins($api_key)
     {
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
+        }
+
         $info = BlockBee::get_info(null, true, $api_key);
 
         if (empty($info)) {
@@ -72,6 +72,7 @@ class BlockBee
         }
 
         $callback_url = $this->callback_url;
+
         if (!empty($this->parameters)) {
             $req_parameters = http_build_query($this->parameters);
             $callback_url   = "{$this->callback_url}?{$req_parameters}";
@@ -79,17 +80,16 @@ class BlockBee
 
         $bb_params = array_merge([
             'callback' => $callback_url,
-            'address'  => $this->own_address,
-            'apikey' => $this->api_key
+            'address'  => $this->own_address
         ], $this->bb_params);
 
         if (empty($this->own_address)) {
             unset($bb_params['address']);
         }
 
-        $response = BlockBee::_request($this->coin, 'create', $bb_params);
+        $response = BlockBee::_request_get($this->coin, 'create', $this->api_key, $bb_params);
 
-        if ($response->status == 'success') {
+        if ($response->status === 'success') {
             $this->payment_address = $response->address_in;
             return $response->address_in;
         }
@@ -110,13 +110,12 @@ class BlockBee
         }
 
         $params = [
-            'callback' => $callback_url,
-            'apikey' => $this->api_key
+            'callback' => $callback_url
         ];
 
-        $response = BlockBee::_request($this->coin, 'logs', $params);
+        $response = BlockBee::_request_get($this->coin, 'logs', $this->api_key, $params);
 
-        if ($response->status == 'success') {
+        if ($response->status === 'success') {
             return $response;
         }
 
@@ -129,9 +128,14 @@ class BlockBee
             return null;
         }
 
+        $address = $this->payment_address;
+
+        if (empty($address)) {
+            $address = $this->get_address();
+        }
+
         $params = [
-            'address' => $this->payment_address,
-            'apikey' => $this->api_key
+            'address' => $address
         ];
 
         if ($value) {
@@ -141,9 +145,9 @@ class BlockBee
             $params['size'] = $size;
         }
 
-        $response = BlockBee::_request($this->coin, 'qrcode', $params);
+        $response = BlockBee::_request_get($this->coin, 'qrcode', $this->api_key, $params);
 
-        if ($response->status == 'success') {
+        if ($response->status === 'success') {
             return $response;
         }
 
@@ -154,19 +158,13 @@ class BlockBee
     {
         $params = [];
 
-        if (empty($api_key)) {
-            throw new Exception('API Key is Empty');
-        }
-
-        $params['apikey'] = $api_key;
-
         if (empty($coin)) {
             $params['prices'] = '0';
         }
 
-        $response = BlockBee::_request($coin, 'info', $params, $assoc);
+        $response = BlockBee::_request_get($coin, 'info',  $api_key, $params, $assoc);
 
-        if (empty($coin) || $response->status == 'success') {
+        if (empty($coin) || $response->status === 'success') {
             return $response;
         }
 
@@ -175,17 +173,12 @@ class BlockBee
 
     public static function get_estimate($coin, $addresses = 1, $priority = 'default', $api_key = '')
     {
-        if (empty($api_key)) {
-            throw new Exception('API Key is Empty');
-        }
-
-        $response = BlockBee::_request($coin, 'estimate', [
+        $response = BlockBee::_request_get($coin, 'estimate', $api_key, [
             'addresses' => $addresses,
             'priority'  => $priority,
-            'apikey' => $api_key
         ]);
 
-        if ($response->status == 'success') {
+        if ($response->status === 'success') {
             return $response;
         }
 
@@ -194,35 +187,130 @@ class BlockBee
 
     public static function get_convert($coin, $value, $from, $api_key)
     {
-        if (empty($api_key)) {
-            throw new Exception('API Key is Empty');
-        }
-
-        $response = BlockBee::_request($coin, 'convert', [
+        $response = BlockBee::_request_get($coin,'convert', $api_key, [
             'value' => $value,
-            'from'  => $from,
-            'apikey' => $api_key
+            'from'  => $from
         ]);
 
-        if ($response->status == 'success') {
+        if ($response->status === 'success') {
             return $response;
         }
 
         return null;
     }
 
-    public static function create_payout ($coin, $address, $value, $api_key) {
-        if (empty($api_key)) {
-            throw new Exception('API Key is Empty');
+    public static function create_payout($coin, $requests, $api_key, $process = false)  {
+        if (empty($requests)) {
+            throw new Exception('No requests provided');
         }
 
-        $response = BlockBee::_request($coin, 'payout/request/create', [
-            'address' => $address,
-            'value'  => $value,
-            'apikey' => $api_key
+        $body['outputs'] = $requests;
+
+        $endpoint = 'payout/request/bulk';
+
+        if ($process) {
+            $endpoint .= '/process';
+        }
+
+        $response = BlockBee::_request_post($coin, $endpoint, $api_key, $body, true);
+
+        if ($response->status === 'success') {
+            return $response;
+        }
+
+        return null;
+    }
+
+    public static function list_payouts ($coin, $status, $page, $api_key, $requests = false) {
+        $params = [];
+
+        if ($status) {
+            $params['status'] = $status;
+        }
+
+        if ($page) {
+            $params['page'] = $page;
+        }
+
+        $endpoint = 'payout/list';
+
+        if ($requests) {
+            $endpoint = 'payout/request/list';
+        }
+
+        $response = BlockBee::_request_get($coin, $endpoint, $api_key, $params);
+
+        if ($response->status === 'success') {
+            return $response;
+        }
+
+        return null;
+    }
+
+    public static function get_payout_wallet($coin, $api_key, $balance = false) {
+        $wallet = BlockBee::_request_get($coin, 'payout/address', $api_key);
+
+        $output = [];
+
+        if ($wallet->status === 'success') {
+            $output['address'] = $wallet->address;
+
+            if ($balance) {
+                $wallet = BlockBee::_request_get($coin, 'payout/balance', $api_key);
+
+                if ($wallet->status === 'success') {
+                    $output['balance'] = $wallet->balance;
+                }
+            }
+
+            return (object) $output;
+        }
+
+        return null;
+    }
+
+    public static function create_payout_by_ids($api_key, $ids = []) {
+        if (empty($ids)) {
+            throw new Exception('Please provide the Payout Request(s) ID(s)');
+        }
+
+        $response = BlockBee::_request_post('', 'payout/create', $api_key, [
+            'request_ids' => implode(',', $ids)
         ]);
 
-        if ($response->status == 'success') {
+        if ($response->status === 'success') {
+            return $response;
+        }
+
+        return null;
+    }
+
+    public static function process_payout($api_key, $id = '') {
+        if (empty($id)) {
+            throw new Exception('Please provide the Payout ID');
+        }
+
+        $response = BlockBee::_request_post('', 'payout/process', $api_key, [
+            'payout_id' => $id
+        ]);
+
+        if ($response->status === 'success') {
+            return $response;
+        }
+
+        return null;
+    }
+
+    public static function check_payout_status($api_key, $id) {
+        if (empty($id)) {
+            throw new Exception('Please provide the Payout ID');
+        }
+
+        $response = BlockBee::_request_post('', 'payout/status', $api_key, [
+            'payout_id' => $id
+        ]);
+
+        if ($response->status === 'success') {
             return $response;
         }
 
@@ -255,20 +343,22 @@ class BlockBee
         return $params;
     }
 
-    private static function _request($coin, $endpoint, $params = [], $assoc = false)
+    private static function _request_get($coin, $endpoint, $api_key, $params = [], $assoc = false)
     {
         $base_url = BlockBee::$base_url;
         $coin     = str_replace('_', '/', (string) $coin);
+
+        if (empty($api_key) && $endpoint !== 'info' && !$coin) {
+            throw new Exception('API Key is Empty');
+        }
+
+        $params['apikey'] = $api_key;
 
         if (!empty($params)) {
             $data = http_build_query($params);
         }
 
-        if (!empty($coin)) {
-            $url = "{$base_url}/{$coin}/{$endpoint}/";
-        } else {
-            $url = "{$base_url}/{$endpoint}/";
-        }
+        $url = !empty($coin) ? "{$base_url}/{$coin}/{$endpoint}/" : "{$base_url}/{$endpoint}/";
 
         if (!empty($data)) {
             $url .= "?{$data}";
@@ -277,6 +367,43 @@ class BlockBee
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($response, $assoc);
+    }
+
+    private static function _request_post($coin, $endpoint, $api_key, $body = [], $isJson = false, $assoc = false )
+    {
+        $base_url = BlockBee::$base_url;
+        $coin = str_replace('_', '/', (string)$coin);
+        $url = !empty($coin) ? "{$base_url}/{$coin}/{$endpoint}/" : "{$base_url}/{$endpoint}/";
+
+        if (empty($api_key)) {
+            throw new Exception('API Key is Empty');
+        }
+
+        $url .= '?apikey=' . $api_key;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        if ($isJson) {
+            $data = json_encode($body);
+            $headers[] = 'Content-Type: application/json';
+        } else {
+            $data = http_build_query($body);
+            $headers[] = 'Content-Type: application/x-www-form-urlencoded';
+        }
+
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+        if (!empty($headers)) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+
         $response = curl_exec($ch);
         curl_close($ch);
 

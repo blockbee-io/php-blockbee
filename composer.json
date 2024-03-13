@@ -2,7 +2,7 @@
   "name": "blockbee/php-blockbee",
   "type": "library",
   "description": "BlockBee's PHP library",
-  "keywords": ["crypto", "bitcoin", "litecoin", "ethereum", "bitcoin cash", "monero", "iota", "payments", "cryptocurrencies", "polygon", "tron", "binance smart chain", "erc20", "bep20"],
+  "keywords": ["crypto", "bitcoin", "litecoin", "ethereum", "bitcoin cash", "polygon", "avalanche-c", "payments", "cryptocurrencies", "polygon", "tron", "binance smart chain", "erc20", "bep20"],
   "homepage": "https://github.com/blockbee-io/php-blockbee",
   "license": "MIT",
   "authors": [
@@ -29,5 +29,5 @@
       "BlockBee\\": "BlockBee/"
     }
   },
-  "version": "1.1.2"
+  "version": "2.0.0"
 }
