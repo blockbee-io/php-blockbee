@@ -57,7 +57,7 @@ try {
 
     $bb_checkout = new BlockBee\Checkout($api_key, $parameters, $blockbee_params);
 
-    # var_dump($bb_checkout->payment_request('https://example.com/', 5)) . PHP_EOL;
+    # var_dump($bb_checkout->payment_request('https://example.com/', 'https://example.com/', 5)) . PHP_EOL;
 
     # var_dump($bb_checkout->deposit_request('https://example.com/')) . PHP_EOL;
 

@@ -273,13 +273,14 @@ require 'vendor/autoload.php'; // Where your vendor directory is
 
 $bb = new BlockBee\Checkout($api_key, $parameters, $blockbee_params);
 
-$payment_address = $bb->payment_request($redirect_url, $value);
+$payment_address = $bb->payment_request($redirect_url, $notify_url, $value);
 ```
 #### Where:
 * ``$api_key`` is the API Key provided by our [Dashboard](https://dash.blockbee.io/).
 * ``$parameters`` is any parameter you wish to send to identify the payment, such as `['order_id' => 1234]`
 * ``$blockbee_params`` parameters that will be passed to BlockBee _(check which extra parameters are available here: https://docs.blockbee.io/#operation/payment)
 * ``$redirect_url`` URL in your platform, where the user will be redirected to following the payment. Should be able to process the payment using the `success_token`.
+* ``$notify_url`` URL in your platform, where the IPN will be sent notifying that a deposit was done. Parameters are available here: https://docs.blockbee.io/#operation/depositipn.
 * ``$value`` amount in currency set in Payment Settings you want to receive from the user.
 
 ### Getting notified when the user completes the Payment

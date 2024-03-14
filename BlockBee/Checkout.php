@@ -29,7 +29,7 @@ class Checkout
      * Handles request to payments.
      * @return array
      */
-    public function payment_request($redirect_url, $value)
+    public function payment_request($redirect_url, $notify_url, $value)
     {
         if (empty($redirect_url) || empty($value)) {
             return null;
@@ -38,10 +38,12 @@ class Checkout
         if (!empty($this->parameters)) {
             $req_parameters = http_build_query($this->parameters);
             $redirect_url   = "{$redirect_url}?{$req_parameters}";
+            $notify_url   = "{$notify_url}?{$req_parameters}";
         }
 
         $bb_params = array_merge([
             'redirect_url' => $redirect_url,
+            'notify_url' => $notify_url,
             'apikey' => $this->api_key,
             'value' => $value
         ], $this->bb_params);
