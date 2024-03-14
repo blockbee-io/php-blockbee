@@ -59,11 +59,11 @@ try {
 
     # var_dump($bb_checkout->payment_request('https://example.com/', 5)) . PHP_EOL;
 
-    var_dump($bb_checkout->deposit_request('https://example.com/')) . PHP_EOL;
+    # var_dump($bb_checkout->deposit_request('https://example.com/')) . PHP_EOL;
 
     # var_dump(\BlockBee\Checkout::payment_logs('iRWFkckdsGa1prgFGoHZFQpxsglAXgdR3k', $api_key)) . PHP_EOL;
 
-    var_dump(\BlockBee\Checkout::deposit_logs('8yHRn7dKn3WrtwcJVpgBUCreMXSRbCki', $api_key)) . PHP_EOL;
+    # var_dump(\BlockBee\Checkout::deposit_logs('8yHRn7dKn3WrtwcJVpgBUCreMXSRbCki', $api_key)) . PHP_EOL;
 
 } catch (Exception $e) {
     var_dump($e);
