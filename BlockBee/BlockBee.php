@@ -229,7 +229,7 @@ class BlockBee
         }
 
         if ($page) {
-            $params['page'] = $page;
+            $params['p'] = $page;
         }
 
         $endpoint = 'payout/list';

@@ -37,6 +37,17 @@ composer require blockbee/php-blockbee
 <?php
 require 'vendor/autoload.php'; // Where your vendor directory is
 
+$coin = 'trc20_usdt';
+$my_address = 'TGfBcXvtZKxxku4X8yx92y56HdYTATKuDF'; # Address by default is set in BlockBee Dashboard, yet if you enable the "Address Override" permission when creating the API Key you can set it here.
+$callback_url = 'https://example.com/callback/';
+$parameters = [
+    'payment_id' => 12345
+];
+$blockbee_params = [
+    'convert' => 1 # You can also add other parameters found in the /create/ documentation https://docs.blockbee.io/#operation/create
+];
+$api_key = '<your-api-key>';
+
 $bb = new BlockBee\BlockBee($coin, $my_address, $callback_url, $parameters, $blockbee_params, $api_key);
 
 $payment_address = $bb->get_address();
@@ -115,6 +126,17 @@ From here you just need to check if the value matches your order's value.
 
 require 'vendor/autoload.php'; // Where your vendor directory is
 
+$coin = 'trc20_usdt';
+$my_address = 'TGfBcXvtZKxxku4X8yx92y56HdYTATKuDF'; # Address by default is set in BlockBee Dashboard, yet if you enable the "Address Override" permission when creating the API Key you can set it here.
+$callback_url = 'https://example.com/callback/';
+$parameters = [
+    'payment_id' => 12345
+];
+$blockbee_params = [
+    'convert' => 1 # You can also add other parameters found in the /create/ documentation https://docs.blockbee.io/#operation/create
+];
+$api_key = '<your-api-key>';
+
 $bb = new BlockBee\BlockBee($coin, $my_address, $callback_url, $parameters, $api_key);
 
 $data = $bb->check_logs();
@@ -143,6 +165,17 @@ object(stdClass) {
 <?php
 require 'vendor/autoload.php'; // Where your vendor directory is
 
+$coin = 'trc20_usdt';
+$my_address = 'TGfBcXvtZKxxku4X8yx92y56HdYTATKuDF'; # Address by default is set in BlockBee Dashboard, yet if you enable the "Address Override" permission when creating the API Key you can set it here.
+$callback_url = 'https://example.com/callback/';
+$parameters = [
+    'payment_id' => 12345
+];
+$blockbee_params = [
+    'convert' => 1 # You can also add other parameters found in the /create/ documentation https://docs.blockbee.io/#operation/create
+];
+$api_key = '<your-api-key>';
+
 $bb = new BlockBee\BlockBee($coin, $my_address, $callback_url, $parameters, $blockbee_params, $api_key);
 
 $qrcode = $bb->get_qrcode($value, $size);
@@ -150,7 +183,7 @@ $qrcode = $bb->get_qrcode($value, $size);
 
 For object creation, same parameters as before.  You must first call `get_address` as this method requires the payment address to have been created.
 
-For QR code generation:
+#### Where:
 
 ``$value`` Value to request the user, in the main coin (BTC, ETH, etc).  Optional, pass `false` to not add a value to the QR.
 
@@ -677,6 +710,9 @@ Contact us @ https://blockbee.io/contacts/
 * Automated Payouts
 * Support to BlockBee Checkout page
 * Various improvements
+
+#### 2.0.1
+* Minor bugfixes
 
 ### Breaking Changes
 
