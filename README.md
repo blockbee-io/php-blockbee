@@ -479,7 +479,7 @@ $create_payout = BlockBee\BlockBee::create_payout($coin, $requests, $api_key, $p
 object(stdClass) {
   ["status"]=>string(7) "success"
   ["payout_info"]=>object(stdClass) {
-    ["id"]=>int(245721)
+    ["id"]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
     ["status"]=>string(7) "Created"
     ["from"]=>string(0) ""
     ["requests"]=>object(stdClass) {
@@ -502,8 +502,8 @@ object(stdClass) {
   string(7) "success"
   ["request_ids"]=>
   array(2) {
-    [0]=>int(52221)
-    [1]=>int(52222)
+    [0]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
+    [1]=>string(36) "d9925105-ea5f-4661-8d01-505096212ac5"
   }
 }
 ```
@@ -542,7 +542,7 @@ object(stdClass) {
   ["status"]=>string(7) "success"
   ["payouts"]=>array(50) {
     [0]=>object(stdClass) {
-      ["id"]=>int(2455)
+      ["id"]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
       ["status"]=>string(4) "Done"
       ["total_requested"]=>string(3) "0.5"
       ["total_with_fee"]=>string(5) "0.505"
@@ -560,7 +560,7 @@ object(stdClass) {
   ["status"]=>string(7) "success"
   ["payout_requests"]=>array(50) {
     [0]=>object(stdClass) {
-      ["id"]=>int(52222)
+      ["id"]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
       ["coin"]=>string(10) "bep20_usdt"
       ["address"]=>string(42) "0x18B211A1Ba5880C7d62C250B6441C2400d588589"
       ["value"]=>string(3) "0.3"
@@ -619,7 +619,7 @@ $payout = BlockBee\BlockBee::create_payout_by_ids($api_key, $ids)
 object(stdClass) {
   ["status"]=>string(7) "success"
   ["payout_info"]=>object(stdClass) {
-    ["id"]=>int(245721)
+    ["id"]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
     ["status"]=>string(7) "Created"
     ["from"]=>string(0) ""
     ["requests"]=>object(stdClass) {
@@ -656,7 +656,7 @@ $wallet = BlockBee\BlockBee::process_payout($api_key, $id)
 object(stdClass) {
   ["status"]=>string(7) "success"
   ["payout_info"]=>object(stdClass) {
-    ["id"]=>int(245721)
+    ["id"]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
     ["status"]=>string(7) "Created"
     ["from"]=>string(0) ""
     ["requests"]=>object(stdClass) {
@@ -694,7 +694,7 @@ $status = BlockBee\BlockBee::check_payout_status($api_key, $id)
 object(stdClass) {
   ["status"]=>string(7) "success"
   ["payout_info"]=>object(stdClass) {
-    ["id"]=>int(2454)
+    ["id"]=>string(36) "3825d29b-7a8f-47da-8623-e99850674247"
     ["status"]=>string(4) "Done"
     ["from"]=>string(42) "0x18B211A1Ba5880C7d62C250B6441C2400d588589"
     ["requests"]=>object(stdClass) {
