@@ -717,6 +717,9 @@ Contact us @ https://blockbee.io/contacts/
 * Minor bugfixes
 * Improve error handling
 
+#### 2.1.1
+* Minor bugfixes
+
 ### Breaking Changes
 
 #### 2.0.0

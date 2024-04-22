@@ -35,7 +35,7 @@ class Requests {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $response_object = json_decode($response, $assoc);
 
-        if (isset($response_object->status) && $response_object->status === 'error') {
+        if ((is_object($response_object) && isset($response_object->status) && $response_object->status === 'error') || (is_array($response_object) && isset($response_object['status']) && $response_object['status'] === 'error')) {
             $statusCode = $http_code;
             $apiError = $response_object->error ?? null;
 
@@ -85,7 +85,7 @@ class Requests {
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $response_object = json_decode($response, $assoc);
 
-        if (isset($response_object->status) && $response_object->status === 'error') {
+        if ((is_object($response_object) && isset($response_object->status) && $response_object->status === 'error') || (is_array($response_object) && isset($response_object['status']) && $response_object['status'] === 'error')) {
             $statusCode = $http_code;
             $apiError = $response_object->error ?? null;
 

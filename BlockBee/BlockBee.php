@@ -16,8 +16,19 @@ class BlockBee
     private $parameters      = [];
     private $api_key         = null;
 
+    /**
+     * @throws Exception
+     */
     public function __construct($coin, $own_address, $callback_url, $parameters = [], $bb_params = [], $api_key = '')
     {
+        if (empty($coin)) {
+            throw new Exception('Please provide a valid coin/ticker.');
+        }
+
+        if (empty($callback_url)) {
+            throw new Exception('Please provide a valid callback url.');
+        }
+
         $this->valid_coins = BlockBee::get_supported_coins($api_key);
 
         if (!in_array($coin, $this->valid_coins)) {
@@ -33,6 +44,9 @@ class BlockBee
         $this->api_key      = $api_key;
     }
 
+    /**
+     * @throws ApiException
+     */
     public static function get_supported_coins($api_key = '')
     {
         $info = BlockBee::get_info(null, true);
@@ -62,10 +76,6 @@ class BlockBee
      */
     public function get_address()
     {
-        if (empty($this->coin) || empty($this->callback_url)) {
-            return null;
-        }
-
         $callback_url = $this->callback_url;
 
         if (!empty($this->parameters)) {
@@ -92,10 +102,6 @@ class BlockBee
 
     public function check_logs()
     {
-        if (empty($this->coin) || empty($this->callback_url)) {
-            return null;
-        }
-
         $callback_url = $this->callback_url;
         if (!empty($this->parameters)) {
             $req_parameters = http_build_query($this->parameters);
@@ -121,10 +127,6 @@ class BlockBee
      */
     public function get_qrcode($value = false, $size = false)
     {
-        if (empty($this->coin)) {
-            return null;
-        }
-
         $address = $this->payment_address;
 
         if (empty($address)) {
