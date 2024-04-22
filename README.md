@@ -478,6 +478,21 @@ $create_payout = BlockBee\BlockBee::create_payout($coin, $requests, $api_key, $p
 # If $process=true
 object(stdClass) {
   ["status"]=>string(7) "success"
+  ["payout_info"]=>object(stdClass) {
+    ["id"]=>int(245721)
+    ["status"]=>string(7) "Created"
+    ["from"]=>string(0) ""
+    ["requests"]=>object(stdClass) {
+      ["0xA6B78B56ee062185E405a1DDDD18cE8fcBC4395d"]=>string(20) "4.000000000000000000"
+    }
+    ["total_requested"]=>string(1) "4"
+    ["total_with_fee"]=>string(4) "4.04"
+    ["total_fiat"]=>string(0) ""
+    ["fee"]=>string(4) "0.04"
+    ["coin"]=>string(10) "bep20_usdt"
+    ["txid"]=>string(0) "" # Once the Payout is fulfilled will have a txid.
+    ["timestamp"]=>string(19) "05/03/2024 15:10:00"
+  }
   ["queued"]=>bool(true)
 }
 
@@ -640,6 +655,21 @@ $wallet = BlockBee\BlockBee::process_payout($api_key, $id)
 ```php
 object(stdClass) {
   ["status"]=>string(7) "success"
+  ["payout_info"]=>object(stdClass) {
+    ["id"]=>int(245721)
+    ["status"]=>string(7) "Created"
+    ["from"]=>string(0) ""
+    ["requests"]=>object(stdClass) {
+      ["0xA6B78B56ee062185E405a1DDDD18cE8fcBC4395d"]=>string(20) "4.000000000000000000"
+    }
+    ["total_requested"]=>string(1) "4"
+    ["total_with_fee"]=>string(4) "4.04"
+    ["total_fiat"]=>string(0) ""
+    ["fee"]=>string(4) "0.04"
+    ["coin"]=>string(10) "bep20_usdt"
+    ["txid"]=>string(0) "" # Once the Payout is fulfilled will have a txid.
+    ["timestamp"]=>string(19) "05/03/2024 15:10:00"
+  }
   ["queued"]=>bool(true)
 }
 ```
