@@ -212,7 +212,7 @@ object(stdClass) {
 <?php
 require 'vendor/autoload.php'; // Where your vendor directory is
 
-$fees = BlockBee\BlockBee::get_estimate($coin, $addresses, $priority, $api_key);
+$fees = BlockBee\BlockBee::get_estimate($coin, $addresses, $priority);
 ```
 
 #### Where:
@@ -247,7 +247,7 @@ object(stdClass) {
 <?php
 require 'vendor/autoload.php'; // Where your vendor directory is
 
-$conversion = BlockBee\BlockBee::get_convert($coin, $value, $from, $api_key);
+$conversion = BlockBee\BlockBee::get_convert($coin, $value, $from);
 ```
 
 #### Where:
@@ -276,7 +276,7 @@ object(stdClass) {
 <?php
 require 'vendor/autoload.php'; // Where your vendor directory is
 
-$coins = BlockBee\BlockBee::get_supported_coins($api_key);
+$coins = BlockBee\BlockBee::get_supported_coins();
 ```
 
 Response is an array with all support coins.
@@ -289,9 +289,8 @@ array(65) {
   [1]=>string(3) "bch"
   [2]=>string(3) "ltc"
   [3]=>string(4) "doge"
-  [4]=>string(3) "xmr" # deprecated
-  [5]=>string(11) "bep20_1inch"
-  [6]=>string(9) "bep20_ada"
+  [4]=>string(11) "bep20_1inch"
+  [5]=>string(9) "bep20_ada"
   # ...remaining supported cryptocurrencies or tokens
 }
 ```
@@ -713,6 +712,10 @@ Contact us @ https://blockbee.io/contacts/
 
 #### 2.0.1
 * Minor bugfixes
+
+#### 2.1.0
+* Minor bugfixes
+* Improve error handling
 
 ### Breaking Changes
 

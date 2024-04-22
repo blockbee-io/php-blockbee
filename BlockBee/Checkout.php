@@ -2,11 +2,11 @@
 
 namespace BlockBee;
 
+use BlockBee\Exceptions\ApiException;
 use Exception;
 
 class Checkout
 {
-    private static $base_url = 'https://api.blockbee.io';
     private $bb_params = [];
     private $parameters = [];
     private $api_key = null;
@@ -28,6 +28,7 @@ class Checkout
     /**
      * Handles request to payments.
      * @return array
+     * @throws ApiException
      */
     public function payment_request($redirect_url, $notify_url, $value)
     {
@@ -48,18 +49,14 @@ class Checkout
             'value' => $value
         ], $this->bb_params);
 
-        $response = Checkout::_request('checkout/request', $bb_params);
-        if ($response->status === 'success') {
-            return $response;
-        }
-
-        return null;
+        return Requests::_request_get(null, 'checkout/request', $bb_params);
     }
 
     /**
      * Fetch payment logs
      * @param $token
      * @param $api_key
+     * @throws ApiException
      */
     public static function payment_logs($token, $api_key){
         if (empty($token)) {
@@ -67,21 +64,17 @@ class Checkout
         }
 
         $params = [
-            'apikey' => $api_key,
-            'token' => $token
+            'token' => $token,
+            'apikey' => $api_key
         ];
 
-        $response = Checkout::_request('checkout/logs', $params);
-        if ($response->status === 'success') {
-            return $response;
-        }
-
-        return null;
+        return Requests::_request_get(null, 'checkout/logs', $params);
     }
 
     /**
      * Handles deposit requests
      * @return array
+     * @throws ApiException
      */
     public function deposit_request($notify_url) {
         if (empty($notify_url)) {
@@ -98,20 +91,14 @@ class Checkout
             'apikey' => $this->api_key,
         ], $this->bb_params);
 
-        $response = Checkout::_request('deposit/request', $bb_params);
-        if ($response->status === 'success') {
-            return [
-                'payment_url' => $response
-            ];
-        }
-
-        return null;
+        return Requests::_request_get(null, 'deposit/request', $bb_params);
     }
 
     /**
      * Fetch payment logs
      * @param $token
      * @param $api_key
+     * @throws ApiException
      */
     public static function deposit_logs($token, $api_key){
         if (empty($token)) {
@@ -119,38 +106,10 @@ class Checkout
         }
 
         $params = [
-            'apikey' => $api_key,
-            'token' => $token
+            'token' => $token,
+            'apikey' => $api_key
         ];
 
-        $response = Checkout::_request('deposit/logs', $params);
-        if ($response->status === 'success') {
-            return $response;
-        }
-
-        return null;
-    }
-
-    private static function _request($endpoint, $params = [], $assoc = false)
-    {
-        $base_url = Checkout::$base_url;
-
-        if (!empty($params)) {
-            $data = http_build_query($params);
-        }
-
-        $url = "{$base_url}/{$endpoint}/";
-
-        if (!empty($data)) {
-            $url .= "?{$data}";
-        }
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return json_decode($response, $assoc);
+        return Requests::_request_get(null, 'deposit/logs', $params);
     }
 }
